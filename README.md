@@ -15,7 +15,7 @@ a range of question types and user responses.
 
 ## Installation
 
-Clone the repository: `git clone https://your-repository-url`
+Clone the repository: `git clone https://github.com/ivanski2/pollapp`
 
 run `docker compose up`
 
