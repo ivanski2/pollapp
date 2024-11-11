@@ -1,0 +1,12 @@
+const {environment} = require('@rails/webpacker');
+
+if (environment.loaders && typeof environment.loaders.get === 'function') {
+    const babelLoader = environment.loaders.get('babel');
+    if (babelLoader) {
+        babelLoader.use[0].options.presets.push(['@babel/preset-react']);
+    }
+} else {
+    console.warn('Loaders are not defined in the current environment configuration.');
+}
+
+module.exports = environment;

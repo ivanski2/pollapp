@@ -1,0 +1,45 @@
+<div class="container mt-5">
+  <h2>Poll Details</h2>
+  <p><strong>Question:</strong> <%= @poll.question %></p>
+  <h3>Options:</h3>
+  <ul>
+    <% @poll.options.each do |option| %>
+      <li><%= option.content %> - <%= option.vote_count %> votes</li>
+    <% end %>
+  </ul>
+  <%= link_to 'Back to Polls', admin_polls_path, class: 'btn btn-secondary mt-3' %>
+  <canvas id="pollChart" width="10" height="10"></canvas>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('pollChart').getContext('2d');
+        var chartData = <%= raw @chart_data.to_json %>;
+
+        var labels = chartData.map(data => data.label);
+        var counts = chartData.map(data => data.count);
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Votes',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>

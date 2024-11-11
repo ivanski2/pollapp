@@ -1,0 +1,5 @@
+const updatedData = <%= raw @poll.options.pluck(:vote_count).to_json %>;
+
+// update data graphic
+resultsChart.data.datasets[0].data = updatedData;
+resultsChart.update();

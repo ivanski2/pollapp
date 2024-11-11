@@ -1,0 +1,6 @@
+<h1>Results for <%= @poll.question %></h1>
+<ul>
+  <% @results.each do |option, votes| %>
+    <li><%= option %>: <%= votes %> votes</li>
+  <% end %>
+</ul>

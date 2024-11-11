@@ -1,0 +1,59 @@
+<h2>Edit Poll</h2>
+<%= form_with model: @poll, url: admin_poll_path(@poll), method: :patch, local: true do |f| %>
+  <div class="form-group mb-3">
+    <%= f.label :question, "Poll Question", class: "form-label" %>
+    <%= f.text_field :question, class: "form-control" %>
+  </div>
+  <h3>Options</h3>
+  <div id="options" class="mb-3">
+    <%= f.fields_for :options do |option_form| %>
+      <div class="input-group mb-2 option-field">
+        <%= option_form.hidden_field :_destroy, class: 'destroy-flag' %>
+        <%= option_form.text_field :content, class: "form-control", placeholder: "Enter an option" %>
+        <button type="button" class="btn btn-danger ms-2 remove-option-btn">Remove</button>
+      </div>
+    <% end %>
+  </div>
+
+  <button type="button" id="add-option-btn" class="btn btn-secondary mb-3">Add Option</button>
+  <div>
+    <%= f.submit "Update Poll", class: "btn btn-success" %>
+  </div>
+<% end %>
+
+<template id="option-template">
+  <div class="input-group mb-2 option-field">
+    <input type="text" name="poll[options_attributes][new][content]" class="form-control" placeholder="Enter an option">
+    <button type="button" class="btn btn-danger ms-2 remove-option-btn">Remove</button>
+  </div>
+</template>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let optionIndex = <%= @poll.options.size %>;
+
+        document.getElementById('add-option-btn').addEventListener('click', handleAddOption);
+
+        document.getElementById('options').addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-option-btn')) {
+                handleRemoveOption(event.target);
+            }
+        });
+
+        function handleAddOption() {
+            const template = document.getElementById("option-template").content.cloneNode(true);
+            const newOptionField = template.querySelector('.option-field input');
+            newOptionField.name = newOptionField.name.replace('new', optionIndex);
+            optionIndex++;
+            document.getElementById("options").appendChild(template);
+        }
+
+        function handleRemoveOption(button) {
+            const optionDiv = button.closest('.option-field');
+            const destroyInput = optionDiv.querySelector('.destroy-flag');
+            destroyInput.value = '1';
+            optionDiv.style.display = 'none';
+        }
+    });
+
+</script>

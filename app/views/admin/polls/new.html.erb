@@ -1,0 +1,73 @@
+<h2>Create a New Poll</h2>
+
+<%= form_with model: @poll, url: admin_polls_path, local: true, class: "form-group" do |f| %>
+  <% if @poll.errors.any? %>
+    <div class="alert alert-danger">
+      <h4>Errors:</h4>
+      <ul>
+        <% @poll.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :question, class: "form-label" %>
+    <%= f.text_field :question, class: "form-control", placeholder: "Enter your poll question" %>
+  </div>
+
+  <h3>Options</h3>
+  <div id="options_fields">
+    <%= f.fields_for :options do |option_form| %>
+      <div class="input-group mb-2" data-index="1">
+        <%= option_form.text_field :content, class: "form-control", placeholder: "Enter an option" %>
+        <button type="button" class="btn btn-danger ms-2" onclick="removeOption(this)">Remove</button>
+      </div>
+    <% end %>
+  </div>
+
+  <button type="button" onclick="addOption()" class="btn btn-secondary mb-3">Add Option</button>
+
+  <div>
+    <%= f.submit "Create Poll", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script>
+    let optionIndex = 1;
+
+    function addOption() {
+        const optionsDiv = document.getElementById("options_fields");
+
+        const newOptionFields = document.createElement("div");
+        newOptionFields.classList.add("input-group", "mb-2");
+
+        const newOptionInput = document.createElement("input");
+        newOptionInput.setAttribute("type", "text");
+        newOptionInput.setAttribute("name", `poll[options_attributes][${optionIndex}][content]`);
+        newOptionInput.setAttribute("placeholder", "Enter an option");
+        newOptionInput.classList.add("form-control");
+
+        const removeButton = document.createElement("button");
+        removeButton.setAttribute("type", "button");
+        removeButton.classList.add("btn", "btn-danger", "ms-2");
+        removeButton.textContent = "Remove";
+        removeButton.onclick = function () {
+            optionsDiv.removeChild(newOptionFields);
+        };
+
+        newOptionFields.dataset.index = optionIndex;
+        newOptionFields.appendChild(newOptionInput);
+        newOptionFields.appendChild(removeButton);
+
+        optionsDiv.appendChild(newOptionFields);
+
+        optionIndex++;
+    }
+
+    function removeOption(button) {
+        const optionDiv = button.parentNode;
+        optionDiv.parentNode.removeChild(optionDiv);
+    }
+</script>

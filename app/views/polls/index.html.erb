@@ -1,0 +1,25 @@
+<div class="container mt-5">
+  <h2>All Polls</h2>
+  <% unless session[:admin_id] %>
+    <%= link_to "Login", admin_login_path, class: "btn btn-primary" %>
+  <% end %>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Poll Question</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @polls.each do |poll| %>
+      <tr>
+        <td><%= poll.question %></td>
+        <td>
+          <%= link_to "View", poll_path(poll), class: "btn btn-info btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
