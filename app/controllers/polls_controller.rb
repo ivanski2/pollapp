@@ -12,7 +12,9 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
     option = @poll.options.find(params[:option_id])
     user_identifier = "#{request.remote_ip}_#{session.id}"
-
+    unless @poll.voting_allowed?
+      redirect_to polls_path, alert: "Voting has ended for this poll."
+    end
     unless Vote.exists?(poll_id: @poll.id, user_identifier: user_identifier)
       option.increment!(:vote_count)
       Vote.create(poll_id: @poll.id, option_id: option.id, user_identifier: user_identifier)

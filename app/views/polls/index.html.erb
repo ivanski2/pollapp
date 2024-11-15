@@ -1,9 +1,5 @@
 <div class="container mt-5">
   <h2>All Polls</h2>
-  <% unless session[:admin_id] %>
-    <%= link_to "Login", admin_login_path, class: "btn btn-primary" %>
-  <% end %>
-
   <table class="table table-striped">
     <thead>
     <tr>
@@ -16,7 +12,18 @@
       <tr>
         <td><%= poll.question %></td>
         <td>
-          <%= link_to "View", poll_path(poll), class: "btn btn-info btn-sm" %>
+          <% if current_user %>
+            <%= link_to "View", poll_path(poll), class: "btn btn-info btn-sm" %>
+            <%= link_to "Add New Poll", new_admin_poll_path, class: "btn btn-primary mb-3" %>
+            <%= link_to "Edit", edit_admin_poll_path(poll), class: "btn btn-warning btn-sm" %>
+            <%= form_with url: duplicate_admin_poll_path(poll), method: :post, class: "d-inline" do %>
+              <%= submit_tag "Duplicate", class: "btn btn-secondary btn-sm" %>
+            <% end %>
+            <%= form_with url: admin_poll_path(poll), method: :delete, class: "d-inline" do %>
+              <%= submit_tag "Delete", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to delete this poll?" } %>
+            <% end %>
+            <%= link_to "Detail", admin_poll_path(poll), class: "btn btn-info btn-sm" %>
+          <% end %>
         </td>
       </tr>
     <% end %>

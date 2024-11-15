@@ -74,3 +74,6 @@ end
 gem 'bcrypt', '~> 3.1.7'
 gem 'webpacker', '~> 5.0'
 gem 'whenever', require: false
+gem 'devise'
+gem 'datagrid'
+gem 'kaminari'

@@ -1,5 +1,18 @@
 const path = require('path');
+const {environment} = require('@rails/webpacker')
+environment.loaders.append('babel', {
+    test: /\.js$/,
+    use: [
+        {
+            loader: 'babel-loader',
+            options: {
+                presets: ['@babel/preset-env']
+            }
+        }
+    ]
+})
 
+module.exports = environment
 module.exports = {
     mode: 'development',
     entry: './app/javascript/application.js',
